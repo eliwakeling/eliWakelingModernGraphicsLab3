@@ -45,17 +45,6 @@ void calcRay(out vec4 rayDirection, out vec4 rayOrigin,
     // w = 0 because it represents a direction; can ignore when using
     rayDirection = vec4(viewport.x, viewport.y, -focalLength, 0.0);
 }
-// hittable struct
-struct hit_record {
-    vec3 p;
-    vec3 normal;
-    float t;
-
-};
-
-bool hit (in vec4 rayDirection, in vec4 rayOrigin, float t_min, float t_max){
-return false;
-}
 
 struct sphereHit {
     vec3 p;
