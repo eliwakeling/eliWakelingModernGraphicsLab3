@@ -126,7 +126,7 @@ struct hittable_list {
 
 //    rayDirection: input ray direction
 //    rayOrigin:    input ray origin
-vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin, bool oneortwo)
+vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin, vec2 resolute)
 {
 
 	// Set Sphere location.
@@ -138,7 +138,7 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin, bool oneortwo)
     sphereHit sphere2;
     //return spheres from a function.
     sphere1 = structSphereHit(rayDirection, rayOrigin, -1.0, 1.0, vec3(0.0, 0.0, -1.0), 0.5);
-    sphere2 = structSphereHit(rayDirection, rayOrigin, -1.0, 1.0, vec3(0.0, -100.5, -1.0), 100.0);
+    sphere2 = structSphereHit(rayDirection, rayOrigin, -1.0, 1.0, vec3(0.0, -100.3, -1.0), 100.0);
     
     // If the sphere is hit.
        if (sphere1.t > 0.0){
@@ -184,6 +184,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     vec2 viewport, ndc, uv, resolutionInv;
     float aspect;
     const float viewportHeight = 2.0, focalLength = 1.0;
+   
 
 
     // ray
@@ -200,7 +201,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
             viewport, focalLength);
 
     // color
-    fragColor = calcColor(rayDirection, rayOrigin, false);
+    fragColor = calcColor(rayDirection, rayOrigin, iResolution.xy);
 
 
 }
