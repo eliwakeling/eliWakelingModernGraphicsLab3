@@ -81,6 +81,7 @@ sphereHit structSphereHit(in vec4 rayDirection, in vec4 rayOrigin, float t_min, 
     float temp = (-halfb - root) / a;
     
         if (temp < t_max && temp > t_min) {
+            //determines if the current normal is facing outward.
         vec3 outward_normal = ((rayDirection.xyz * temp) - oc) / radius;
         bool front_face = dot(rayDirection.xyz, outward_normal) < 0.0;
         vec3 normal = front_face ? outward_normal :-outward_normal;
@@ -89,6 +90,7 @@ sphereHit structSphereHit(in vec4 rayDirection, in vec4 rayOrigin, float t_min, 
         
     temp = (-halfb + root / a);
         if (temp < t_max && temp > t_min) {
+            //determines if the current normal is facing outward.
         vec3 outward_normal = ((rayDirection.xyz * temp) - oc) / radius;
         bool front_face = dot(rayDirection.xyz, outward_normal) < 0.0;
         vec3 normal = front_face ? outward_normal :-outward_normal;
@@ -124,28 +126,33 @@ float hit_sphere(float radius, in vec4 rayDirection, in vec3 centerpoint, in vec
 
 //    rayDirection: input ray direction
 //    rayOrigin:    input ray origin
-vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
+vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin, bool oneortwo)
 {
 
 	// Set Sphere location.
    float hitt = hit_sphere(0.5, rayDirection, vec3(0.0, 0.0, -1.0), rayOrigin);
     
         //hitlist
-    
+    //declare spheres.
     sphereHit sphere1;
     sphereHit sphere2;
+    //return spheres from a function.
     sphere1 = structSphereHit(rayDirection, rayOrigin, -1.0, 1.0, vec3(0.0, 0.0, -1.0), 0.5);
     sphere2 = structSphereHit(rayDirection, rayOrigin, -1.0, 1.0, vec3(0.0, -100.5, -1.0), 100.0);
     
     // If the sphere is hit.
-       if (hitt > 0.0){
+       if (sphere1.t > 0.0){
         //Render the Sphere
-		vec3 a2 = vec3(hitt, hitt, hitt);
-        vec3 N = normalize(rayOrigin.xyz + rayDirection.xyz * hitt - vec3(0.0, 0.0, -1.0));
+		vec3 a2 = vec3(sphere1.t, sphere1.t, sphere1.t);
+        vec3 N = normalize(rayOrigin.xyz + rayDirection.xyz * sphere1.t - vec3(0.0, 0.0, -1.0));
         vec3 N2 = 0.5 * vec3(N + 1.0);
         return vec4(vec3(N2), 1.0);
        // return vec4(1, 0, 0, 1);
        }
+    
+          if (sphere2.t > 0.0){
+           return vec4 (0.0,1.0,0.0,1.0);   
+          }
         //Vec4s appropriated from the book to simulate the background.
    //Set white and Blue colors
    vec4 w = vec4(1.0, 1.0, 1.0, 1.0);
@@ -181,19 +188,3 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
     // ray
     vec4 rayDirection, rayOrigin;
-    
-
-    
-
-
-    // setup
-    calcViewport(viewport, ndc, uv, aspect, resolutionInv,
-                 viewportHeight, fragCoord, iResolution.xy);
-    calcRay(rayDirection, rayOrigin,
-            viewport, focalLength);
-
-    // color
-    fragColor = calcColor(rayDirection, rayOrigin);
-
-
-}
