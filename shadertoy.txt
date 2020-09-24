@@ -106,7 +106,7 @@ struct hittable_list {
 };
 
 //Creates the sphere to be hit.
-float hit_sphere(float radius, in vec4 rayDirection, in vec3 centerpoint, in vec4 rayOrigin){
+/*float hit_sphere(float radius, in vec4 rayDirection, in vec3 centerpoint, in vec4 rayOrigin){
 
     //Set the center point of the sphere.
     vec3 oc = rayOrigin.xyz - centerpoint;
@@ -122,7 +122,7 @@ float hit_sphere(float radius, in vec4 rayDirection, in vec3 centerpoint, in vec
         return (-b - sqrt(discriminant)) / (2.0*a);
     }
     
-}
+}*/
 
 //    rayDirection: input ray direction
 //    rayOrigin:    input ray origin
@@ -130,7 +130,7 @@ vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin, bool oneortwo)
 {
 
 	// Set Sphere location.
-   float hitt = hit_sphere(0.5, rayDirection, vec3(0.0, 0.0, -1.0), rayOrigin);
+  // float hitt = hit_sphere(0.5, rayDirection, vec3(0.0, 0.0, -1.0), rayOrigin);
     
         //hitlist
     //declare spheres.
@@ -188,3 +188,19 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
     // ray
     vec4 rayDirection, rayOrigin;
+    
+
+    
+
+
+    // setup
+    calcViewport(viewport, ndc, uv, aspect, resolutionInv,
+                 viewportHeight, fragCoord, iResolution.xy);
+    calcRay(rayDirection, rayOrigin,
+            viewport, focalLength);
+
+    // color
+    fragColor = calcColor(rayDirection, rayOrigin, false);
+
+
+}
